@@ -27,11 +27,9 @@ List of offerings
 	    <tr>
 		  <th scope="col">Original request</th>
 		  <th scope="col">Original message</th>
-	      <th scope="col">Date</th>
-	      <th scope="col">Starting Time</th>
-	      <th scope="col">Ending Time</th>
-          <th scope="col">User</th>
-          <th scope="col">To User</th>
+	      <th scope="col">Your Date</th>
+	      <th scope="col">Your Starting Time</th>
+	      <th scope="col">Your Ending Time</th>
 		  <th scope="col">Your message</th>
 	    </tr>
 	  </thead>
@@ -44,8 +42,6 @@ List of offerings
 	      <td>{{offer.date}}</td>
 	      <td>{{offer.start_time}}</td>
 	      <td>{{offer.end_time}}</td>
-          <td>{{offer.User.username}}</td>
-          <td>{{offer.Request.User.username}}</td>
 		  <td>{{offer.message}}</td>
 		  <td>
 			<a button type="button" class="btn btn-outline-secondary btn-sm" href="{% url 'chat_commerce:offer_update' offer.id %}">Edit</a>
