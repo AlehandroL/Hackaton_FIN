@@ -23,14 +23,7 @@ SCOPES = ['https://www.googleapis.com/auth/calendar']
 def accept_offer(receivedRequest, offerId):
     offer = Offer.objects.get(pk=offerId)
     request = Request.objects.get(pk=offer.id)
-    #requestUser = Request.User
     offerUser = offer.User
-    print(offerUser.email)
-
-    user = User.objects.get(id=2)
-    user_email = user.email
-    #print ('requestUser: '+ requestUser.email)
-    print ('offerUser: '+ str(offerUser))
 
     #print(f'hola {self.Request.User.username}')
     event = {
