@@ -26,12 +26,11 @@ def accept_offer(receivedRequest, offerId):
     send_calendar_invitation(receivedRequest, offerId, creds)
     update_offer_table(offerId)
     update_request_table(offerId)
-    decline_old_calendar_event(receivedRequest, offerId, creds)
+    #decline_old_calendar_event(receivedRequest, offerId, creds)
     return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
 
 def send_calendar_invitation(receivedRequest, offerId, creds):
     offer = Offer.objects.get(pk=offerId)
-    request = Request.objects.get(pk=offer.id)
     offerUser = offer.User
 
     event = {
@@ -118,9 +117,9 @@ def decline_old_calendar_event(receivedRequest, offerId, creds):
 
 def find_old_calendar_event(receivedRequest, offerId, creds):
     offer = Offer.objects.get(pk=offerId)
-    request = Request.objects.get(pk=offer.id)
-    minTime = str(request.date) + 'T' + str(request.start_time) + '-04:00'
     try:
+        request = Request.objects.get(pk=offer.id)
+        minTime = str(request.date) + 'T' + str(request.start_time) + '-04:00'
         service = build('calendar', 'v3', credentials=creds)
         events_result = service.events().list(calendarId='primary', timeMin=minTime,
                                               maxResults=1, singleEvents=True,
