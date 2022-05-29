@@ -80,7 +80,13 @@ def update_offer_table(offerId):
     offer = Offer.objects.get(pk=offerId)
     offer.accepted = True
     offer.active = False
-    offer.save()
+    #offer.save()
+
+    requestId = Request.objects.get(original_request=offerId)
+    offersToCancel = Offer.objects.get(Request_id=requestId)
+    print (offersToCancel)
+
+
 
     return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
 
@@ -88,6 +94,6 @@ def update_request_table(offerId):
     request = Request.objects.get(original_request=offerId)
     request.accepted = True
     request.active = False
-    request.save()
+    #request.save()
 
     return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
