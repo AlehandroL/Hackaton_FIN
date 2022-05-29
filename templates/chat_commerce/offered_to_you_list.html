@@ -2,11 +2,23 @@
 
 {% block title %}
 
-List of offerings
+Fintual's Chat Market
 
 {% endblock %}
 
 {% block content %}
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+	<div class="px-6 py-2 my-2 text-center">
+		<h1 class="display-5 fw-bold">List of swaps offered to you</h1>
+	</div>
 
 	<table class="table">
 	  <thead>

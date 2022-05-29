@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class Request(models.Model):
     User = models.ForeignKey(User, related_name='requesting_user', on_delete=models.CASCADE)
     message = models.TextField(blank=True)
-    active = models.BooleanField(default=False)
+    active = models.BooleanField(default=True)
     date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
@@ -26,7 +26,7 @@ class Offer(models.Model):
     User = models.ForeignKey(User, related_name='offering_user', on_delete=models.CASCADE)
     Request = models.ForeignKey(Request, related_name='original_request', on_delete=models.CASCADE)
     message = models.TextField(blank=True)
-    active = models.BooleanField(default=False)
+    active = models.BooleanField(default=True)
     date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
