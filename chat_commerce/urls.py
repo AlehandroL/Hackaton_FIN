@@ -12,5 +12,6 @@ urlpatterns = [
     path('make_offer/<int:id>/', views.OfferCreateView.as_view(), name='make_offer'),
     path('make_request/', views.RequestCreateView.as_view(), name='make_request'),
     path('delete_request/<pk>', views.RequestDeleteView.as_view(), name='delete_request'),
+    path('delete_offer/<pk>', views.OfferDeleteView.as_view(), name='delete_offer'),
     path('offer_update/<pk>', views.OfferUpdateView.as_view(), name='offer_update'),
 ]
