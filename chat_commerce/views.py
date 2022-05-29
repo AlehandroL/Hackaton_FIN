@@ -14,7 +14,11 @@ class RequestListView(ListView):
     template_name = 'chat_commerce/request_list.html'
     raise_exception = True
 
-class OfferListView(ListView):
+class OfferListView(LoginRequiredMixin, ListView):
     model = Offer
     template_name = 'chat_commerce/offer_list.html'
     raise_exception = True
+
+    def get_queryset(self):
+        return Offer.objects.filter(User=self.request.user)
+
