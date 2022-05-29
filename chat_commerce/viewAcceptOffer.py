@@ -22,6 +22,12 @@ from .models import Request, Offer
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 def accept_offer(receivedRequest, offerId):
+    #send_calendar_invitation(receivedRequest, offerId)
+    update_offer_table(offerId)
+    update_request_table(offerId)
+    return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
+
+def send_calendar_invitation(receivedRequest, offerId):
     offer = Offer.objects.get(pk=offerId)
     request = Request.objects.get(pk=offer.id)
     offerUser = offer.User
@@ -71,4 +77,20 @@ def accept_offer(receivedRequest, offerId):
     print ('Event created: %s' % (event.get('htmlLink')))
 
     messages.success(self.request, 'Your chats have been swapped successfully!')
+    return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
+
+def update_offer_table(offerId):
+    offer = Offer.objects.get(pk=offerId)
+    offer.accepted = True
+    offer.active = False
+    offer.save()
+
+    return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
+
+def update_request_table(offerId):
+    request = Request.objects.get(original_request=offerId)
+    request.accepted = True
+    request.active = False
+    request.save()
+
     return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
