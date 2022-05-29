@@ -22,3 +22,7 @@ class OfferListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Offer.objects.filter(User=self.request.user)
 
+class AcceptOffer (ListView):
+    model = Request
+    template_name = 'chat_commerce/accept_offer.html'
+    raise_exception = True
