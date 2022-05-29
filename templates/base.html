@@ -14,7 +14,7 @@
 
 <body>
 	<header>
-	        <nav class="navbar navbar-expand-md navbar-light bg-white border-bottom">
+	        <nav class="navbar navbar-expand-md navbar-dark bg-primary border-bottom">
 	            <div class="container-fluid">
 	                <a class="navbar-brand" href="{% url "chat_commerce:request_list" %}">Available swaps</a>
 	                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
@@ -23,14 +23,12 @@
 	                </button>
 	                <div class="collapse navbar-collapse" id="navbarCollapse">
 	                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
-							{% if request.user.is_authenticated %}
 							<li class="nav-item active">
-	                            <a class="nav-link" aria-current="page" href="{% url "chat_commerce:offerred_to_you" %}">Offered to you</a>
+	                            <a class="nav-link active" aria-current="page" href="{% url "chat_commerce:offerred_to_you" %}">Offered to you</a>
 	                        </li>
 							<li class="nav-item active">
-	                            <a class="nav-link" aria-current="page" href="{% url "chat_commerce:your_offers" %}">Your offers</a>
+	                            <a class="nav-link active" aria-current="page" href="{% url "chat_commerce:your_offers" %}">Your offers</a>
 	                        </li>
-							{% endif %}
 	                    </ul>
 	                </div>
 	            </div>

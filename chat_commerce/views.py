@@ -58,7 +58,7 @@ class OfferCreateView(LoginRequiredMixin, CreateView):
         form.instance.active = True
         form.save()
         messages.success(self.request, 'Your offer has been sent successfully!')
-        return redirect(reverse_lazy('chat_commerce:request_list'))
+        return redirect(reverse_lazy('chat_commerce:your_offers'))
 
 
 class RequestCreateView(LoginRequiredMixin, CreateView):
@@ -83,6 +83,31 @@ class RequestCreateView(LoginRequiredMixin, CreateView):
         form.save()
         messages.success(self.request, 'Your request has been created successfully!')
         return redirect(reverse_lazy('chat_commerce:request_list'))
+
+
+class RequestDeleteView(LoginRequiredMixin, DeleteView):
+    model = Request
+    template_name = 'chat_commerce/delete_request.html'
+    success_url = reverse_lazy('chat_commerce:request_list')
+
+    def form_valid(self, form):
+        self.object = self.get_object()
+        self.object.delete()
+        messages.success(self.request, 'Your request has been deleted successfully!')
+        return redirect(reverse_lazy('chat_commerce:request_list'))
+    
+
+class OfferDeleteView(LoginRequiredMixin, DeleteView):
+    model = Offer
+    template_name = 'chat_commerce/delete_offer.html'
+    success_url = reverse_lazy('chat_commerce:your_offers')
+
+    def form_valid(self, form):
+        self.object = self.get_object()
+        self.object.delete()
+        messages.success(self.request, 'Your offer has been deleted successfully!')
+        return redirect(reverse_lazy('chat_commerce:your_offers'))
+    
 
 
 class OfferUpdateView(LoginRequiredMixin, UpdateView):

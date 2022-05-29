@@ -44,7 +44,10 @@ List of offerings
 	      <td>{{offer.end_time}}</td>
 		  <td>{{offer.message}}</td>
 		  <td>
-			<a button type="button" class="btn btn-outline-secondary btn-sm" href="{% url 'chat_commerce:offer_update' offer.id %}">Edit</a>
+			<a button type="button" class="btn btn-outline-primary btn-sm" href="{% url 'chat_commerce:offer_update' offer.id %}">Edit</a>
+		  </td>
+		  <td>
+			<a button type="button" class="btn btn-outline-secondary btn-sm" href="{% url 'chat_commerce:delete_offer' offer.id %}">Delete</a>
 		  </td>
 	    </tr>
         {% endif %}
