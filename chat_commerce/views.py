@@ -12,6 +12,7 @@ class RequestListView(ListView):
     template_name = 'chat_commerce/request_list.html'
     raise_exception = True
 
+
 class OfferedToYou_ListView(LoginRequiredMixin, ListView):
     model = Offer
     template_name = 'chat_commerce/offered_to_you_list.html'
@@ -22,6 +23,7 @@ class OfferedToYou_ListView(LoginRequiredMixin, ListView):
         print(request_ids)
         return Offer.objects.filter(Request_id__in=request_ids)
 
+
 class YourOffers_ListView(LoginRequiredMixin, ListView):
     model = Offer
     template_name = 'chat_commerce/your_offers.html'
@@ -29,7 +31,6 @@ class YourOffers_ListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Offer.objects.filter(User=self.request.user)
-
 
 
 class OfferCreateView(LoginRequiredMixin, CreateView):
@@ -43,3 +44,25 @@ class OfferCreateView(LoginRequiredMixin, CreateView):
         form.instance.active = True
         form.save()
         return redirect(reverse_lazy('chat_commerce:request_list'))
+
+
+class RequestCreateView(LoginRequiredMixin, CreateView):
+    model = Request
+    fields = ['date', 'start_time', 'end_time', 'message']
+    template_name = 'chat_commerce/request_create.html'
+    
+    def form_valid(self, form):
+        form.instance.User = self.request.user
+        form.instance.active = True
+        form.save()
+        return redirect(reverse_lazy('chat_commerce:request_list'))
+
+
+class OfferUpdateView(LoginRequiredMixin, UpdateView):
+    model = Offer
+    fields = ['date', 'start_time', 'end_time', 'message']
+    template_name = 'chat_commerce/offer_update.html'
+    
+    def form_valid(self, form):
+        form.save()
+        return redirect(reverse_lazy('chat_commerce:your_offers'))

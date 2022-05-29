@@ -11,13 +11,14 @@ List of offerings
 	<table class="table">
 	  <thead>
 	    <tr>
-		  <th scope="col">Your request</th>
+		  <th scope="col">Original request</th>
+		  <th scope="col">Original message</th>
 	      <th scope="col">Date</th>
 	      <th scope="col">Starting Time</th>
 	      <th scope="col">Ending Time</th>
           <th scope="col">User</th>
           <th scope="col">To User</th>
-		  <th scope="col">Message</th>
+		  <th scope="col">Your message</th>
 	    </tr>
 	  </thead>
 	  <tbody>
@@ -25,6 +26,7 @@ List of offerings
         {% if offer.active %}
 		<tr>
 		  <td>{{offer.Request}}</td>
+          <td>{{offer.Request.message}}</td>
 	      <td>{{offer.date}}</td>
 	      <td>{{offer.start_time}}</td>
 	      <td>{{offer.end_time}}</td>
@@ -32,7 +34,7 @@ List of offerings
           <td>{{offer.Request.User.username}}</td>
 		  <td>{{offer.message}}</td>
 		  <td>
-			<a button type="button" class="btn btn-outline-secondary btn-sm" href="{% url 'chat_commerce:accept_offer' %}">Accept</a>
+			<a button type="button" class="btn btn-outline-secondary btn-sm" href="{% url 'chat_commerce:offer_update' offer.id %}">Edit</a>
 		  </td>
 	    </tr>
         {% endif %}
