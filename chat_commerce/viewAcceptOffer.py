@@ -14,6 +14,7 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from django.contrib import messages
 
 from django.contrib.auth.models import User
 from .models import Request, Offer
@@ -74,6 +75,8 @@ def send_calendar_invitation(receivedRequest, offerId):
         print('An error occurred: %s' % error)
 
     print ('Event created: %s' % (event.get('htmlLink')))
+
+    messages.success(self.request, 'Your chats have been swapped successfully!')
     return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
 
 def update_offer_table(offerId):

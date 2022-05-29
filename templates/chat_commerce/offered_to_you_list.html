@@ -11,7 +11,9 @@ Fintual's Chat Market
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
-    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+    <div class="alert alert-success" role="alert">
+		{{ message }}
+	  </div>
     {% endfor %}
 </ul>
 {% endif %}
@@ -24,11 +26,10 @@ Fintual's Chat Market
 	  <thead>
 	    <tr>
 		  <th scope="col">Your request</th>
-	      <th scope="col">Date</th>
-	      <th scope="col">Starting Time</th>
-	      <th scope="col">Ending Time</th>
-          <th scope="col">User</th>
-          <th scope="col">To User</th>
+	      <th scope="col">Offered Date</th>
+	      <th scope="col">Offered Starting Time</th>
+	      <th scope="col">Offered Ending Time</th>
+          <th scope="col">Offered by</th>
 		  <th scope="col">Message</th>
 	    </tr>
 	  </thead>
@@ -41,7 +42,6 @@ Fintual's Chat Market
 	      <td>{{offer.start_time}}</td>
 	      <td>{{offer.end_time}}</td>
           <td>{{offer.User.username}}</td>
-          <td>{{offer.Request.User.username}}</td>
 		  <td>{{offer.message}}</td>
 		  <td>
 			<a button type="button" class="btn btn-outline-secondary btn-sm" href="{% url 'chat_commerce:accept_offer' offerId=offer.id %}">Accept</a>

@@ -12,7 +12,9 @@ Fintual's Chat Market
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
-    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+	<div class="alert alert-success" role="alert">
+		{{ message }}
+	  </div>
     {% endfor %}
 </ul>
 {% endif %}
@@ -52,6 +54,7 @@ Fintual's Chat Market
 	   
 	  </tbody>
 	</table>
-	<a button type="button" class="btn btn-outline-primary btn-sm" href="{% url 'chat_commerce:make_request' %}">Add your request</a>
-	
+	<div class="d-grid gap-2">
+		<a button class="btn btn-primary" type="button" href="{% url 'chat_commerce:make_request' %}">Add your request</a>
+	  </div>
 {% endblock %}
