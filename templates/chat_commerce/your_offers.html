@@ -1,0 +1,43 @@
+{% extends "../base.html" %}
+
+{% block title %}
+
+List of offerings
+
+{% endblock %}
+
+{% block content %}
+
+	<table class="table">
+	  <thead>
+	    <tr>
+		  <th scope="col">Your request</th>
+	      <th scope="col">Date</th>
+	      <th scope="col">Starting Time</th>
+	      <th scope="col">Ending Time</th>
+          <th scope="col">User</th>
+          <th scope="col">To User</th>
+		  <th scope="col">Message</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    {% for offer in object_list %}
+        {% if offer.active %}
+		<tr>
+		  <td>{{offer.Request}}</td>
+	      <td>{{offer.date}}</td>
+	      <td>{{offer.start_time}}</td>
+	      <td>{{offer.end_time}}</td>
+          <td>{{offer.User.username}}</td>
+          <td>{{offer.Request.User.username}}</td>
+		  <td>{{offer.message}}</td>
+		  <td>
+			<a button type="button" class="btn btn-outline-secondary btn-sm" href="{% url 'chat_commerce:accept_offer' %}">Accept</a>
+		  </td>
+	    </tr>
+        {% endif %}
+	   {% endfor %}
+	  </tbody>
+	</table>
+	
+{% endblock %}

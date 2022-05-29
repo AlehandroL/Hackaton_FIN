@@ -7,10 +7,11 @@ List of offerings
 {% endblock %}
 
 {% block content %}
-	
+
 	<table class="table">
 	  <thead>
 	    <tr>
+		  <th scope="col">Your request</th>
 	      <th scope="col">Date</th>
 	      <th scope="col">Starting Time</th>
 	      <th scope="col">Ending Time</th>
@@ -23,6 +24,7 @@ List of offerings
 	    {% for offer in object_list %}
         {% if offer.active %}
 		<tr>
+		  <td>{{offer.Request}}</td>
 	      <td>{{offer.date}}</td>
 	      <td>{{offer.start_time}}</td>
 	      <td>{{offer.end_time}}</td>

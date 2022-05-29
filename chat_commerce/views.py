@@ -1,11 +1,8 @@
-from django.shortcuts import get_object_or_404, render, redirect
-from django.views import generic
+from django.shortcuts import redirect
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from django.template.defaultfilters import slugify
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.http import HttpResponse
 
 from .models import Request, Offer
 
@@ -15,25 +12,34 @@ class RequestListView(ListView):
     template_name = 'chat_commerce/request_list.html'
     raise_exception = True
 
-class OfferListView(LoginRequiredMixin, ListView):
+class OfferedToYou_ListView(LoginRequiredMixin, ListView):
     model = Offer
-    template_name = 'chat_commerce/offer_list.html'
+    template_name = 'chat_commerce/offered_to_you_list.html'
+    raise_exception = True
+
+    def get_queryset(self):
+        request_ids = Request.objects.filter(User=self.request.user).values_list('pk', flat=True)
+        print(request_ids)
+        return Offer.objects.filter(Request_id__in=request_ids)
+
+class YourOffers_ListView(LoginRequiredMixin, ListView):
+    model = Offer
+    template_name = 'chat_commerce/your_offers.html'
     raise_exception = True
 
     def get_queryset(self):
         return Offer.objects.filter(User=self.request.user)
 
-def make_offer(Request):
-    print(f'hola {Request.User.username}')
-    return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
+
 
 class OfferCreateView(LoginRequiredMixin, CreateView):
     model = Offer
-    fields = ['category', 'name', 'desc', 'image', 'price']
-    template_name = 'store/products/create.html'
+    fields = ['date', 'start_time', 'end_time', 'message']
+    template_name = 'chat_commerce/offer_create.html'
     
     def form_valid(self, form):
-        form.instance.created_by = self.request.user
-        form.instance.slug = slugify(form.instance.name)
+        form.instance.User = self.request.user
+        form.instance.Request = Request.objects.get(pk=self.kwargs['id'])
+        form.instance.active = True
         form.save()
-        return redirect(reverse_lazy('store:product_list'))
+        return redirect(reverse_lazy('chat_commerce:request_list'))
