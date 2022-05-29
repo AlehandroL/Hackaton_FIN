@@ -1,6 +1,6 @@
 import datetime
 import os.path
-
+from datetime import timedelta
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views import generic
 from django.views.generic import ListView
@@ -22,17 +22,18 @@ from .models import Request, Offer
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 def accept_offer(receivedRequest, offerId):
-    send_calendar_invitation(receivedRequest, offerId)
+    creds = get_credentials()
+    send_calendar_invitation(receivedRequest, offerId, creds)
     update_offer_table(offerId)
     update_request_table(offerId)
+    decline_old_calendar_event(receivedRequest, offerId, creds)
     return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
 
-def send_calendar_invitation(receivedRequest, offerId):
+def send_calendar_invitation(receivedRequest, offerId, creds):
     offer = Offer.objects.get(pk=offerId)
     request = Request.objects.get(pk=offer.id)
     offerUser = offer.User
 
-    #print(f'hola {self.Request.User.username}')
     event = {
         'summary': 'Chat: Ignacio',
         'description': 'Hora de chat de servicio al cliente.',
@@ -50,23 +51,6 @@ def send_calendar_invitation(receivedRequest, offerId):
         ]
     }
     
-    creds = None
-    # The file token.json stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
-    #if os.path.exists('token.json'):
-    #    creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-    # If there are no (valid) credentials available, let the user log in.
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0)
-        # Save the credentials for the next run
-        with open('token.json', 'w') as token:
-            token.write(creds.to_json())
     try:
         service = build('calendar', 'v3', credentials=creds)
         event = service.events().insert(calendarId='primary', body=event, sendUpdates='all').execute()
@@ -76,7 +60,7 @@ def send_calendar_invitation(receivedRequest, offerId):
 
     print ('Event created: %s' % (event.get('htmlLink')))
 
-    messages.success(self.request, 'Your chats have been swapped successfully!')
+    messages.success(receivedRequest, 'Your chats have been swapped successfully!')
     return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
 
 def update_offer_table(offerId):
@@ -103,3 +87,57 @@ def update_request_table(offerId):
     request.save()
 
     return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
+
+def get_credentials():
+    creds = None
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                'credentials.json', SCOPES)
+            creds = flow.run_local_server(port=0)
+        # Save the credentials for the next run
+        with open('token.json', 'w') as token:
+            token.write(creds.to_json())
+    return creds
+
+def decline_old_calendar_event(receivedRequest, offerId, creds):
+    retrievedEventId = find_old_calendar_event(receivedRequest, offerId, creds)
+    print (retrievedEventId)
+    if retrievedEventId != '':
+        try:
+            service = build('calendar', 'v3', credentials=creds)
+            service.events().delete(calendarId='primary', eventId=retrievedEventId).execute()
+        except HttpError as error:
+            print('An error occurred: %s' % error)
+    else:
+        print('no event to delete')
+
+    return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
+
+def find_old_calendar_event(receivedRequest, offerId, creds):
+    offer = Offer.objects.get(pk=offerId)
+    request = Request.objects.get(pk=offer.id)
+    minTime = str(request.date) + 'T' + str(request.start_time) + '-04:00'
+    try:
+        service = build('calendar', 'v3', credentials=creds)
+        events_result = service.events().list(calendarId='primary', timeMin=minTime,
+                                              maxResults=1, singleEvents=True,
+                                              orderBy='startTime').execute()
+        events = events_result.get('items', [])
+
+        if not events:
+            print('No upcoming events found.')
+            return
+
+        for event in events:
+            start = event['start'].get('dateTime', event['start'].get('date'))
+            end = event['end'].get('dateTime', event['end'].get('date'))
+
+            if (start[11:19] == str(request.start_time) and end[11:19] == str(request.end_time) and start[0:10] == str(request.date)):
+                return event['id']
+
+    except HttpError as error:
+        print('An error occurred: %s' % error)
+    return ''
