@@ -15,6 +15,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
+from django.contrib.auth.models import User
 from .models import Request, Offer
 
 SCOPES = ['https://www.googleapis.com/auth/calendar']
@@ -22,24 +23,30 @@ SCOPES = ['https://www.googleapis.com/auth/calendar']
 def accept_offer(receivedRequest, offerId):
     offer = Offer.objects.get(pk=offerId)
     request = Request.objects.get(pk=offer.id)
-    print (offer.User.username)
-    print (request)
+    #requestUser = Request.User
+    offerUser = offer.User
+    print(offerUser.email)
+
+    user = User.objects.get(id=2)
+    user_email = user.email
+    #print ('requestUser: '+ requestUser.email)
+    print ('offerUser: '+ str(offerUser))
 
     #print(f'hola {self.Request.User.username}')
     event = {
         'summary': 'Chat: Ignacio',
-        'description': 'Hora de chat de servicio al cliente. Para pedir un cambio de hora, haz clic acá',
+        'description': 'Hora de chat de servicio al cliente.',
         'start': {
-            'dateTime': '2022-05-29T08:30:00-04:00',
+            'dateTime': ''+str(offer.date)+'T'+str(offer.start_time)+'-04:00',
             'timeZone': 'America/Santiago',
         },
         'end': {
-            'dateTime': '2022-05-29T09:30:00-04:00',
+            'dateTime': ''+str(offer.date)+'T'+str(offer.end_time)+'-04:00',
             'timeZone': 'America/Santiago',
         },
         'attendees': [
             {'email': 'iaheck@uc.cl'},
-            {'email': 'ignheck@gmail.com'},
+            {'email': ''+offerUser.email+''},
         ]
     }
     
@@ -62,7 +69,7 @@ def accept_offer(receivedRequest, offerId):
             token.write(creds.to_json())
     try:
         service = build('calendar', 'v3', credentials=creds)
-        #event = service.events().insert(calendarId='primary', body=event, sendUpdates='all').execute()
+        event = service.events().insert(calendarId='primary', body=event, sendUpdates='all').execute()
 
     except HttpError as error:
         print('An error occurred: %s' % error)
