@@ -22,7 +22,7 @@ from .models import Request, Offer
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 def accept_offer(receivedRequest, offerId):
-    #send_calendar_invitation(receivedRequest, offerId)
+    send_calendar_invitation(receivedRequest, offerId)
     update_offer_table(offerId)
     update_request_table(offerId)
     return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
@@ -83,13 +83,16 @@ def update_offer_table(offerId):
     offer = Offer.objects.get(pk=offerId)
     offer.accepted = True
     offer.active = False
-    #offer.save()
+    offer.save()
 
     requestId = Request.objects.get(original_request=offerId)
-    offersToCancel = Offer.objects.get(Request_id=requestId)
-    print (offersToCancel)
-
-
+    offersToCancel = Offer.objects.filter(Request_id=requestId).filter(accepted=False)
+    for offer in offersToCancel:
+        print ('Deleting offer:')
+        print (offer)
+        offer.accepted = False
+        offer.active = False
+        offer.save()
 
     return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
 
@@ -97,6 +100,6 @@ def update_request_table(offerId):
     request = Request.objects.get(original_request=offerId)
     request.accepted = True
     request.active = False
-    #request.save()
+    request.save()
 
     return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
