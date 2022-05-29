@@ -32,9 +32,12 @@ List of products
 			<a button type="button" class="btn btn-outline-secondary btn-sm" href="{% url 'chat_commerce:make_offer' request.id %}">Make an offer</a>
 		  </td>
 	    </tr>
+		
         {% endif %}
 	   {% endfor %}
+	   
 	  </tbody>
 	</table>
+	<a button type="button" class="btn btn-outline-primary btn-sm" href="{% url 'chat_commerce:make_request' %}">Add your request</a>
 	
 {% endblock %}
