@@ -12,7 +12,8 @@ List of products
 	  <thead>
 	    <tr>
 	      <th scope="col">Date</th>
-	      <th scope="col">Time</th>
+	      <th scope="col">Starting Time</th>
+	      <th scope="col">Ending Time</th>
           <th scope="col">User</th>
 		  <th scope="col">Message</th>
 		  <th scope="col">Trade</th>
@@ -23,11 +24,12 @@ List of products
         {% if request.active %}
 		<tr>
 	      <td>{{request.date}}</td>
-	      <td>{{request.time}}</td>
+	      <td>{{request.start_time}}</td>
+		  <td>{{request.end_time}}</td>
           <td>{{request.User.username}}</td>
 		  <td>{{request.message}}</td>
 		  <td>
-			<a button type="button" class="btn btn-outline-secondary btn-sm" href="{% url 'chat_commerce:make_offer'  %}">Make an offer</a>
+			<a button type="button" class="btn btn-outline-secondary btn-sm" href="{% url 'chat_commerce:make_offer' request.id %}">Make an offer</a>
 		  </td>
 	    </tr>
         {% endif %}

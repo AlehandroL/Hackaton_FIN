@@ -12,7 +12,8 @@ List of offerings
 	  <thead>
 	    <tr>
 	      <th scope="col">Date</th>
-	      <th scope="col">Time</th>
+	      <th scope="col">Starting Time</th>
+	      <th scope="col">Ending Time</th>
           <th scope="col">User</th>
           <th scope="col">To User</th>
 		  <th scope="col">Message</th>
@@ -23,7 +24,8 @@ List of offerings
         {% if offer.active %}
 		<tr>
 	      <td>{{offer.date}}</td>
-	      <td>{{offer.time}}</td>
+	      <td>{{offer.start_time}}</td>
+	      <td>{{offer.end_time}}</td>
           <td>{{offer.User.username}}</td>
           <td>{{offer.Request.User.username}}</td>
 		  <td>{{offer.message}}</td>

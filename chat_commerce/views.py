@@ -26,3 +26,14 @@ class OfferListView(LoginRequiredMixin, ListView):
 def make_offer(Request):
     print(f'hola {Request.User.username}')
     return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
+
+class OfferCreateView(LoginRequiredMixin, CreateView):
+    model = Offer
+    fields = ['category', 'name', 'desc', 'image', 'price']
+    template_name = 'store/products/create.html'
+    
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        form.instance.slug = slugify(form.instance.name)
+        form.save()
+        return redirect(reverse_lazy('store:product_list'))
