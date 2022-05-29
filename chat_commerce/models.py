@@ -7,14 +7,15 @@ class Request(models.Model):
     message = models.TextField(blank=True)
     active = models.BooleanField(default=False)
     date = models.DateField()
-    time = models.TimeField()
+    start_time = models.TimeField(null=True)
+    end_time = models.TimeField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
 
     class Meta:
         verbose_name_plural = 'Requests'
-        ordering = ('date', "time")
+        ordering = ('date', "start_time", "end_time")
 
     def __str__(self):
         return self.User.username
@@ -26,14 +27,15 @@ class Offer(models.Model):
     message = models.TextField(blank=True)
     active = models.BooleanField(default=False)
     date = models.DateField()
-    time = models.TimeField()
+    start_time = models.TimeField(null=True)
+    end_time = models.TimeField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
 
     class Meta:
         verbose_name_plural = 'Offerings'
-        ordering = ('date', "time")
+        ordering = ('date', "start_time", "end_time")
 
     def __str__(self):
         return self.User.username
