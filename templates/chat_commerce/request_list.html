@@ -15,6 +15,7 @@ List of products
 	      <th scope="col">Time</th>
           <th scope="col">User</th>
 		  <th scope="col">Message</th>
+		  <th scope="col">Trade</th>
 	    </tr>
 	  </thead>
 	  <tbody>
@@ -25,6 +26,9 @@ List of products
 	      <td>{{request.time}}</td>
           <td>{{request.User.username}}</td>
 		  <td>{{request.message}}</td>
+		  <td>
+			<a button type="button" class="btn btn-outline-secondary btn-sm" href="{% url 'chat_commerce:make_offer'  %}">Make an offer</a>
+		  </td>
 	    </tr>
         {% endif %}
 	   {% endfor %}

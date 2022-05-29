@@ -5,6 +5,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.template.defaultfilters import slugify
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
+from django.http import HttpResponse
 
 from .models import Request, Offer
 
@@ -22,3 +23,6 @@ class OfferListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Offer.objects.filter(User=self.request.user)
 
+def make_offer(Request):
+    print(f'hola {Request.User.username}')
+    return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
