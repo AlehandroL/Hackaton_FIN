@@ -85,6 +85,18 @@ class RequestCreateView(LoginRequiredMixin, CreateView):
         return redirect(reverse_lazy('chat_commerce:request_list'))
 
 
+class RequestDeleteView(LoginRequiredMixin, DeleteView):
+    model = Request
+    template_name = 'chat_commerce/delete_request.html'
+    success_url = reverse_lazy('chat_commerce:request_list')
+
+    def form_valid(self, form):
+        self.object = self.get_object()
+        self.object.delete()
+        messages.success(self.request, 'Your offer has been deleted successfully!')
+        return redirect(reverse_lazy('chat_commerce:request_list'))
+    
+
 class OfferUpdateView(LoginRequiredMixin, UpdateView):
     model = Offer
     fields = ['date', 'start_time', 'end_time', 'message']

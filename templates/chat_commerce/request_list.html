@@ -45,7 +45,11 @@ Fintual's Chat Market
           <td>{{request.User.username}}</td>
 		  <td>{{request.message}}</td>
 		  <td>
-			<a button type="button" class="btn btn-outline-secondary btn-sm" href="{% url 'chat_commerce:make_offer' request.id %}">Make an offer</a>
+			  {% if user != request.User %}
+			<a button type="button" class="btn btn-outline-primary btn-sm" href="{% url 'chat_commerce:make_offer' request.id %}">Make an offer</a>
+			  {% else %}
+			<a button type="button" class="btn btn-outline-secondary btn-sm" href="{% url 'chat_commerce:delete_request' request.id %}">Delete request</a>
+			  {% endif %}
 		  </td>
 	    </tr>
 		
@@ -54,7 +58,7 @@ Fintual's Chat Market
 	   
 	  </tbody>
 	</table>
-	<div class="d-grid gap-2">
+	<div class="d-grid gap-2 col-6 mx-auto"">
 		<a button class="btn btn-primary" type="button" href="{% url 'chat_commerce:make_request' %}">Add your request</a>
 	  </div>
 {% endblock %}

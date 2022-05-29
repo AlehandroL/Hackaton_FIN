@@ -23,14 +23,12 @@
 	                </button>
 	                <div class="collapse navbar-collapse" id="navbarCollapse">
 	                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
-							{% if request.user.is_authenticated %}
 							<li class="nav-item active">
 	                            <a class="nav-link active" aria-current="page" href="{% url "chat_commerce:offerred_to_you" %}">Offered to you</a>
 	                        </li>
 							<li class="nav-item active">
 	                            <a class="nav-link active" aria-current="page" href="{% url "chat_commerce:your_offers" %}">Your offers</a>
 	                        </li>
-							{% endif %}
 	                    </ul>
 	                </div>
 	            </div>

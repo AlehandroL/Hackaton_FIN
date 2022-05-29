@@ -1,0 +1,22 @@
+{% extends "../base.html" %}
+
+{% block title %}
+
+Delete request
+
+{% endblock %}
+
+{% block content %}
+
+<form method="post">{% csrf_token %}
+
+    {{ form.as_p }}
+    
+    <h4 class="display-7 fw-bold">Do you wish to delete the following request?</h4>
+    
+    <h4 class="display-7">{{ request }}</h4>
+
+    <input type="submit" value="Delete">
+</form>
+
+{% endblock %}
