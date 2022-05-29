@@ -3,6 +3,9 @@ from django.views.generic import ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
+from django import forms
+from django.contrib import messages
+
 
 from .models import Request, Offer
 
@@ -37,12 +40,24 @@ class OfferCreateView(LoginRequiredMixin, CreateView):
     model = Offer
     fields = ['date', 'start_time', 'end_time', 'message']
     template_name = 'chat_commerce/offer_create.html'
+
+    def get_form(self, form_class=None):
+        if form_class is None:
+            form_class = self.get_form_class()
+
+        form = super(OfferCreateView, self).get_form(form_class)
+        form.fields['date'].widget = forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'})
+        form.fields['start_time'].widget = forms.TextInput(attrs={'placeholder': 'HH:MM:SS'})
+        form.fields['end_time'].widget = forms.TextInput(attrs={'placeholder': 'HH:MM:SS'})
+        form.fields['message'].widget = forms.TextInput(attrs={'placeholder': 'Enter a message'})
+        return form
     
     def form_valid(self, form):
         form.instance.User = self.request.user
         form.instance.Request = Request.objects.get(pk=self.kwargs['id'])
         form.instance.active = True
         form.save()
+        messages.success(self.request, 'Your offer has been sent successfully!')
         return redirect(reverse_lazy('chat_commerce:request_list'))
 
 
@@ -50,11 +65,23 @@ class RequestCreateView(LoginRequiredMixin, CreateView):
     model = Request
     fields = ['date', 'start_time', 'end_time', 'message']
     template_name = 'chat_commerce/request_create.html'
+
+    def get_form(self, form_class=None):
+        if form_class is None:
+            form_class = self.get_form_class()
+
+        form = super(RequestCreateView, self).get_form(form_class)
+        form.fields['date'].widget = forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'})
+        form.fields['start_time'].widget = forms.TextInput(attrs={'placeholder': 'HH:MM:SS'})
+        form.fields['end_time'].widget = forms.TextInput(attrs={'placeholder': 'HH:MM:SS'})
+        form.fields['message'].widget = forms.TextInput(attrs={'placeholder': 'Enter a message'})
+        return form
     
     def form_valid(self, form):
         form.instance.User = self.request.user
         form.instance.active = True
         form.save()
+        messages.success(self.request, 'Your request has been created successfully!')
         return redirect(reverse_lazy('chat_commerce:request_list'))
 
 
@@ -65,4 +92,5 @@ class OfferUpdateView(LoginRequiredMixin, UpdateView):
     
     def form_valid(self, form):
         form.save()
+        messages.success(self.request, 'Your offer has been updated successfully!')
         return redirect(reverse_lazy('chat_commerce:your_offers'))
