@@ -32,7 +32,7 @@ List of offerings
           <td>{{offer.Request.User.username}}</td>
 		  <td>{{offer.message}}</td>
 		  <td>
-			<a button type="button" class="btn btn-outline-secondary btn-sm" href="{% url 'chat_commerce:accept_offer' %}">Accept</a>
+			<a button type="button" class="btn btn-outline-secondary btn-sm" href="{% url 'chat_commerce:accept_offer' offerId=offer.id %}">Accept</a>
 		  </td>
 	    </tr>
         {% endif %}
